@@ -1,9 +1,12 @@
 from telegram import Update, ReplyKeyboardMarkup
-from telegram.ext import Application, CommandHandler, MessageHandler, CallbackQueryHandler, filters, ContextTypes
-from reels import reels_handler, handle_text, download_reels, user_states
+from telegram.ext import Application, CommandHandler, MessageHandler, \
+                                        CallbackQueryHandler, filters, ContextTypes
+
+from reels import reels_handler, handle_text, download_reels
 from features import show_features
 
-# دکمه‌های اصلی
+
+# main button 
 main_buttons = ReplyKeyboardMarkup(
     [["📥 دانلود ریلز", "📌 امکانات دیگر"]],
     resize_keyboard=True
@@ -11,7 +14,6 @@ main_buttons = ReplyKeyboardMarkup(
 
 
 async def home_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    
 
     try:
         await update.message.delete()  
@@ -25,11 +27,12 @@ async def home_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """پیام خوش‌آمدگویی و نمایش دکمه‌ها"""
+    """send welcome message and show main button"""
     await update.message.reply_text(
         "🎉 خوش آمدید! لطفا یک گزینه را انتخاب کنید:",
         reply_markup=main_buttons
     )
+
 
 async def main_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """مدیریت ورودی‌ها"""
@@ -49,19 +52,20 @@ async def main_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
 
 def main():
-    """اجرای ربات"""
+    """this function run bot and handele functions"""
     app = Application.builder().token("7374641101:AAHKdik0DRXVtm-lzm3Vi_fTg_uvBcooV9Y").build()
 
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.Text("🏠"), home_handler))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, main_handler))
-    print("done")
+
+
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_text))
     app.add_handler(CallbackQueryHandler(download_reels))
 
-  
 
     app.run_polling()
+
 
 if __name__ == "__main__":
     main()

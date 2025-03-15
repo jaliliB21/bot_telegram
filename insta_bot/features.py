@@ -6,7 +6,10 @@ home_button = ReplyKeyboardMarkup([["🏠"]], resize_keyboard=True)
 
 
 async def show_features(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    
+    """
+    Sends feature options with inline buttons and prompts the user to select one.
+    """
+
     if update.message:  
         keyboard = [
             [InlineKeyboardButton("📸 دانلود استوری", callback_data="download_story")],

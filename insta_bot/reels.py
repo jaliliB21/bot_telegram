@@ -2,12 +2,18 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKe
 from telegram.ext import ContextTypes
 import instaloader
 
-# نگه داشتن وضعیت کاربران
+
+# Keeping users' status
 user_states = {}
 
+
 async def reels_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """درخواست لینک و نمایش دکمه خانه"""
-    print("reels handeler")
+    """ 
+    Requests a Reels video link from the user and updates their state.
+    
+    Sets the state to "waiting_for_reels_url" and displays a "Home" button for navigation.
+    """
+
     chat_id = update.message.chat_id
     user_states[chat_id] = "waiting_for_reels_url"
 
@@ -16,8 +22,14 @@ async def reels_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         reply_markup=ReplyKeyboardMarkup([["🏠"]], resize_keyboard=True)
     )
 
+
 async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    print("handeler text")
+    """
+    Handles user input when a Reels link is sent. 
+
+    Saves the link, updates the state, and prompts the user to choose a download option.
+    """
+
 
     chat_id = update.message.chat_id
     text = update.message.text
@@ -39,7 +51,12 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
 async def download_reels(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    print("reel download")
+
+    """
+    Processes the selected download option and retrieves the Reels video.
+
+    Fetches the video, cover, or caption based on user choice and sends it to the chat.
+    """
 
     query = update.callback_query
     chat_id = query.message.chat_id
