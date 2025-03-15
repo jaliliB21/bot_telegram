@@ -35,9 +35,11 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def main_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """مدیریت ورودی‌ها"""
+    """
+    Handles user input and triggers corresponding actions based on the message text.
+    """
+
     text = update.message.text
-    # chat_id = update.message.chat_id
 
     if text == "📥 دانلود ریلز":
         await reels_handler(update, context)
