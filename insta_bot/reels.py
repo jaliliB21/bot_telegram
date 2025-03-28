@@ -58,6 +58,7 @@ async def download_reels(update: Update, context: ContextTypes.DEFAULT_TYPE):
     Fetches the video, cover, or caption based on user choice and sends it to the chat.
     """
 
+    print("download reel")
     query = update.callback_query
     chat_id = query.message.chat_id
     selected_option = query.data
