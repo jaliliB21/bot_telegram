@@ -3,7 +3,7 @@ from telegram.ext import Application, CommandHandler, MessageHandler, \
                                         CallbackQueryHandler, filters, ContextTypes
 
 from reels import reels_handler, handle_text, download_reels
-from features import show_features, request_story_link, download_and_send_story
+from features import show_features, request_story_link, download_and_send_story, request_profile_link, download_and_send_profile
 
 
 # main button 
@@ -57,25 +57,21 @@ async def main_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # elif context.user_data.get("waiting_for_story", False):  
     #     print("yes")
     #     await download_and_send_story(update, context)
-
+    
+    # elif context.user_data.get("waiting_for_profile", False):  
+        
+    #     await download_and_send_profile(update, context)
+    
     
 async def feature_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     query.answer()
 
     if query.data == "download_story":
-        print("yes1")
         await request_story_link(update, context)
-
     
-    # query = update.callback_query
-    # if query:
-    #     await query.answer()
-   
-
-    #     if query.data == "download_story":
-    #         print("yes1")
-    #         await request_story_link(update, context)
+    if query.data == "download_profile":
+        await request_profile_link
 
 
 def main():
@@ -95,6 +91,10 @@ def main():
 
     # app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, feature_handler))
     # app.add_handler(CallbackQueryHandler(download_and_send_story))
+
+    # app.add_handler(CallbackQueryHandler(request_profile_link, pattern="^download_profile$"))
+    # app.add_handler(CallbackQueryHandler(download_and_send_profile))
+
 
     print("runned")
 

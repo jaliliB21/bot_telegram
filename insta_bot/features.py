@@ -52,7 +52,7 @@ async def show_features(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def request_story_link(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """request give story link"""
-    chat_id = update.effective_chat.id
+
     context.user_data["waiting_for_story"] = True  
 
     await update.effective_message.reply_text("🔗 لطفاً لینک استوری را ارسال کنید:")
@@ -98,4 +98,3 @@ async def download_and_send_story(update: Update, context: ContextTypes.DEFAULT_
     except Exception as e:
         await update.message.reply_text(f"⛔ خطا در دانلود استوری: {e}")
         context.user_data["waiting_for_story"] = False
-    
