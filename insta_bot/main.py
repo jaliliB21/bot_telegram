@@ -2,13 +2,14 @@ from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, \
                                         CallbackQueryHandler, filters, ContextTypes
 
-from reels import reels_handler, handle_text, download_reels
-from features import show_features, request_story_link, download_and_send_story, request_profile_link, download_and_send_profile
+from reels import reels_handler, handle_btn, download_reels
+from post import post_handler, handle_btn_post, post_download
+from features import show_features
 
 
 # main button 
 main_buttons = ReplyKeyboardMarkup(
-    [["📥 دانلود ریلز", "📌 امکانات دیگر"]],
+    [["📥 دانلود ریلز", "📌 امکانات دیگر", "دانلود پست"]],
     resize_keyboard=True
 )
 
@@ -48,11 +49,19 @@ async def main_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif text == "📌 امکانات دیگر":
         await show_features(update, context)
+    
+    elif text == "دانلود پست":
+        await post_handler(update, context)
+        context.user_data["waiting_for_post_url"] = True  
+
 
     elif context.user_data.get("waiting_for_reels_url", False):  
-        
-        await handle_text(update, context)
-        context.user_data["waiting_for_reels_url"] = False  
+        await handle_btn(update, context)
+        context.user_data["waiting_for_reels_url"] = False 
+
+    elif context.user_data.get("waiting_for_post_url", False):  
+        await handle_btn_post(update, context)
+        context.user_data["waiting_for_post_url"] = False   
     
     # elif context.user_data.get("waiting_for_story", False):  
     #     print("yes")
@@ -67,24 +76,28 @@ async def feature_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     query.answer()
 
-    if query.data == "download_story":
-        await request_story_link(update, context)
+    # if query.data == "download_story":
+    #     await request_story_link(update, context)
     
-    if query.data == "download_profile":
-        await request_profile_link
+    # if query.data == "download_profile":
+    #     await request_profile_link
 
 
 def main():
     """this function run bot and handele functions"""
-    app = Application.builder().token("7775427064:AAECpqHDGMxHPG1pb5ih-KhctptdBhUhFuM").build()
+    app = Application.builder().token("").build()
 
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.Text("🏠"), home_handler))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, main_handler))
 
     # reel handeler
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_text))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_btn))
     app.add_handler(CallbackQueryHandler(download_reels, pattern="^reels_"))
+
+    # post handeler
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_btn_post))
+    app.add_handler(CallbackQueryHandler(post_download, pattern="^post_"))
 
     # story handeler
     # app.add_handler(CallbackQueryHandler(request_story_link, pattern="^download_story$"))

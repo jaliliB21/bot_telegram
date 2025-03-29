@@ -23,7 +23,7 @@ async def reels_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 
-async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def handle_btn(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """
     Handles user input when a Reels link is sent. 
 
@@ -35,8 +35,8 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text
 
     if chat_id in user_states and user_states[chat_id] == "waiting_for_reels_url":
-        context.user_data["reels_url"] = text  # ذخیره لینک ریلز
-        user_states[chat_id] = "reels_options"  # تغییر وضعیت
+        context.user_data["reels_url"] = text  
+        user_states[chat_id] = "reels_options"
 
         keyboard = [
             [InlineKeyboardButton("📜 دانلود با کپشن", callback_data="reels_caption")],
