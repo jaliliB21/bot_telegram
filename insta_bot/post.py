@@ -92,13 +92,19 @@ async def post_download(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
             media_files = [f for f in os.listdir(target_dir) if f.endswith(('.jpg', '.mp4'))]
 
+            caption_sent = False
+
             for media_file in media_files:
                 media_path = os.path.join(target_dir, media_file)
                 with open(media_path, 'rb') as file:
+                    current_caption = caption[:1024] if not caption_sent and caption else None
+
                     if media_file.endswith('.jpg'):
-                        await context.bot.send_photo(chat_id=chat_id, photo=file, caption=caption[:1024])
+                        await context.bot.send_photo(chat_id=chat_id, photo=file, caption=current_caption)
                     elif media_file.endswith('.mp4'):
-                        await context.bot.send_video(chat_id=chat_id, video=file, caption=caption[:1024])
+                        await context.bot.send_video(chat_id=chat_id, video=file, caption=current_caption)
+
+                caption_sent = True
                 os.remove(media_path)
 
             shutil.rmtree(target_dir)
