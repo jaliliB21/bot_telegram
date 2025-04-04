@@ -22,7 +22,7 @@ L = instaloader.Instaloader()
 #     L.save_session_to_file(session_file)
 
 
-async def show_features(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def show_features(update: Update):
     """
     Sends feature options with inline buttons and prompts the user to select one.
     """
